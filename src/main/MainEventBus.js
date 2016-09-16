@@ -33,6 +33,12 @@ export default class MainEventBus {
 
 				mainWindow.setContentBounds(updatedBounds);
 				break;
+			case 'window-pin':
+				const { isPinned } = params;
+
+				app.getMainWindow().setAlwaysOnTop(isPinned);
+				break;
+
 		}
 	}
 }

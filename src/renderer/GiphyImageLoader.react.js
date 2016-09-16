@@ -1,8 +1,10 @@
 import React from 'react';
+import { remote } from 'electron';
 
 import GiphyImage from './GiphyImage.react';
 import ControlPanel from './ControlPanel.react';
 import * as giphyService from './service/giphy';
+import * as mainService from './service/main';
 
 export default class GiphyImageLoaderComponent extends React.Component {
 	static propTypes = {
@@ -29,6 +31,7 @@ export default class GiphyImageLoaderComponent extends React.Component {
 
 		this._imageIterator = null;
 		this._handleImageLoaded = this._handleImageLoaded.bind(this);
+		this._handlePinToggle = this._handlePinToggle.bind(this);
 	}
 
 	componentDidMount () {
@@ -105,6 +108,10 @@ export default class GiphyImageLoaderComponent extends React.Component {
 		this._startImageIteration();
 	}
 
+	_handlePinToggle (isPinned) {
+		mainService.setAlwaysOnTop(isPinned);
+	}
+
 	render () {
 		let content = <span>No image loaded</span>;
 
@@ -120,6 +127,7 @@ export default class GiphyImageLoaderComponent extends React.Component {
 					<ControlPanel
 						isVisible={true}
 						onSearch={(text) => {console.log(text);}}
+						onPin={this._handlePinToggle}
 					/>
 				</div>
 			);

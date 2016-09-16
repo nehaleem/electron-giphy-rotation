@@ -1,9 +1,10 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export default class ControlPanelComponent extends React.Component {
 	static propTypes = {
 		isVisible: React.PropTypes.bool,
-		onPause: React.PropTypes.func,
+		onPin: React.PropTypes.func,
 		onSearch: React.PropTypes.func,
 		onPrev: React.PropTypes.func,
 		onNext: React.PropTypes.func,
@@ -14,11 +15,13 @@ export default class ControlPanelComponent extends React.Component {
 
 		this.state = {
 			isSearchOpen: false,
+			windowIsPinned: false,
 		};
 
 		this._searchInputNode = null;
 
 		this._handleSearch = this._handleSearch.bind(this);
+		this._handlePinToggle = this._handlePinToggle.bind(this);
 	}
 
 	_setSearchState (state) {
@@ -29,6 +32,12 @@ export default class ControlPanelComponent extends React.Component {
 		this._setSearchState(false);
 
 		this.props.onSearch(this._searchInputNode.value);
+	}
+
+	_handlePinToggle () {
+		this.setState({ windowIsPinned: !this.state.windowIsPinned });
+
+		this.props.onPin(!this.state.windowIsPinned);
 	}
 
 	_renderButtons () {
@@ -60,7 +69,13 @@ export default class ControlPanelComponent extends React.Component {
 				</button>,
 				<button key="prevBtn" className="button">{'<'}</button>,
 				<button key="nextBtn" className="button">></button>,
-				<button key="likeBtn" className="button">✩</button>,
+				<button
+					key="likeBtn"
+					onClick={this._handlePinToggle}
+					className={classNames('button', { active: this.state.windowIsPinned })}
+				>
+					P
+				</button>,
 			];
 		}
 	}

@@ -16,7 +16,7 @@ class App {
 			return this;
 		}
 
-		const mainWindow = new BrowserWindow(Object.assign({ width: 1000, height: 800, resizable, frame: false }));
+		const mainWindow = new BrowserWindow(Object.assign({ width: 1000, height: 800, resizable, frame: true }));
 
 		if (useTrayIcon) {
 			const trayIconPath = App._getTrayIconPath();
@@ -26,7 +26,7 @@ class App {
 
 		mainWindow.setMenu(null);
 		mainWindow.loadURL(`file://${path.resolve(__dirname, '..', '..', 'static', 'index.html')}`);
-		//mainWindow.openDevTools();
+		mainWindow.openDevTools({ mode: 'detach' });
 
 		this._windows.set('main', mainWindow);
 		this._registerAppEventListeners();

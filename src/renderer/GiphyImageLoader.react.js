@@ -117,7 +117,7 @@ export default class GiphyImageLoaderComponent extends React.Component {
 
 		if (this.state.images.length) {
 			content = (
-				<div>
+				<div className="giphy-loader">
 					<GiphyImage
 						url={this.state.currentImage.url}
 						width={this.state.currentImage.width}
@@ -125,7 +125,6 @@ export default class GiphyImageLoaderComponent extends React.Component {
 						onImageLoaded={this._handleImageLoaded}
 					/>
 					<ControlPanel
-						isVisible={true}
 						onSearch={(text) => {console.log(text);}}
 						onPin={this._handlePinToggle}
 					/>

@@ -3,7 +3,6 @@ import classNames from 'classnames';
 
 export default class ControlPanelComponent extends React.Component {
 	static propTypes = {
-		isVisible: React.PropTypes.bool,
 		onPin: React.PropTypes.func,
 		onSearch: React.PropTypes.func,
 		onPrev: React.PropTypes.func,
@@ -35,7 +34,10 @@ export default class ControlPanelComponent extends React.Component {
 	}
 
 	_handlePinToggle () {
-		this.setState({ windowIsPinned: !this.state.windowIsPinned });
+		this.setState(
+			{ windowIsPinned: !this.state.windowIsPinned },
+			() => { this._searchInputNode.focus() }
+		);
 
 		this.props.onPin(!this.state.windowIsPinned);
 	}
@@ -46,6 +48,7 @@ export default class ControlPanelComponent extends React.Component {
 				<input
 					ref={(node) => this._searchInputNode = node }
 					key="search"
+					maxLength="50"
 					pattern="[A-Za-z]+"
 					type="text"
 				/>,

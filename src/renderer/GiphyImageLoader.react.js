@@ -1,6 +1,7 @@
 import React from 'react';
 
 import GiphyImage from './GiphyImage.react';
+import ControlPanel from './ControlPanel.react';
 import * as giphyService from './service/giphy';
 
 export default class GiphyImageLoaderComponent extends React.Component {
@@ -105,20 +106,25 @@ export default class GiphyImageLoaderComponent extends React.Component {
 	}
 
 	render () {
-		return (
-			<div>
-				{
-					this.state.images.length ?
-						<GiphyImage
-							url={this.state.currentImage.url}
-							width={this.state.currentImage.width}
-							height={this.state.currentImage.height}
-							onImageLoaded={this._handleImageLoaded}
-						/> :
-						'No image loaded'
-				}
-			</div>
+		let content = <span>No image loaded</span>;
 
-		);
+		if (this.state.images.length) {
+			content = (
+				<div>
+					<GiphyImage
+						url={this.state.currentImage.url}
+						width={this.state.currentImage.width}
+						height={this.state.currentImage.height}
+						onImageLoaded={this._handleImageLoaded}
+					/>
+					<ControlPanel
+						isVisible={true}
+						onSearch={(text) => {console.log(text);}}
+					/>
+				</div>
+			);
+		}
+
+		return content;
 	}
 }

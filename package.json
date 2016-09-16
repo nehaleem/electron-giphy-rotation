@@ -1,0 +1,37 @@
+{
+  "name": "electron-giphy-rotation",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+	"clean": "rimraf build/",
+	"build": "./node_modules/babel-cli/bin/babel.js src --out-dir build --sourceMaps inline",
+    "watch": "nodemon --exec \"npm run start\" --ext js,css",
+    "start": "npm run build && electron . --enable-logging --remote-debugging-port=9222"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-preset-electron": "^0.37.8",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "devtron": "^1.3.0",
+    "electron-prebuilt": "^1.3.3",
+    "nodemon": "^1.10.2",
+    "rimraf": "^2.5.4"
+  },
+  "dependencies": {
+    "fs-extra-promise": "^0.4.1",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "request-promise": "^4.1.1"
+  },
+  "build": {
+    "appId": "nehaleem.demoapp",
+    "category": "demo"
+  }
+}

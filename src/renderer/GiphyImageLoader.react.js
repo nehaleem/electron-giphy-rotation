@@ -8,7 +8,6 @@ import * as mainService from './service/main';
 
 export default class GiphyImageLoaderComponent extends React.Component {
 	static propTypes = {
-		keyword: React.PropTypes.string.isRequired,
 		rotationSpeed: React.PropTypes.number,
 		cacheCount: React.PropTypes.number,
 		cacheMaxHit: React.PropTypes.number,
@@ -24,6 +23,7 @@ export default class GiphyImageLoaderComponent extends React.Component {
 		super(props);
 
 		this.state = {
+			keyword: '',
 			images: [],
 			currentImage: null,
 			offset: 0,
@@ -32,9 +32,14 @@ export default class GiphyImageLoaderComponent extends React.Component {
 		this._imageIterator = null;
 		this._handleImageLoaded = this._handleImageLoaded.bind(this);
 		this._handlePinToggle = this._handlePinToggle.bind(this);
+		this._handleSearch = this._handleSearch.bind(this);
 	}
 
 	componentDidMount () {
+		if (!this.state.keyword) {
+			return;
+		}
+
 		this._fetchImagesFromOffset(0)
 			.then((result) => {
 				if (result.images.length) {
@@ -43,14 +48,13 @@ export default class GiphyImageLoaderComponent extends React.Component {
 					this.setState({
 						images: result.images,
 						currentImage: image,
-						offset: this.props.cacheCount,
 					});
 
 					giphyService.resizeWindowForImage(image.width, image.height);
 
 					this._tryPreloadNextImage(0);
 				}
-			})
+			});
 	}
 
 	_startImageIteration () {
@@ -68,7 +72,8 @@ export default class GiphyImageLoaderComponent extends React.Component {
 					giphyService.resizeWindowForImage(nextImage.width, nextImage.height);
 
 					this.setState({
-						currentImage: nextImage
+						currentImage: nextImage,
+						offset: this.state.offset + 1,
 					});
 				}
 
@@ -85,9 +90,8 @@ export default class GiphyImageLoaderComponent extends React.Component {
 	}
 
 	_fetchImagesFromOffset (offset) {
-		const { keyword } = this.props;
-
-		return giphyService.searchGifsByName(keyword, { offset, limit: this.props.cacheCount });
+		return giphyService
+			.searchGifsByName(this.state.keyword, { offset, limit: this.props.cacheCount });
 	}
 
 	_preloadImageUrl (url) {
@@ -112,26 +116,63 @@ export default class GiphyImageLoaderComponent extends React.Component {
 		mainService.setAlwaysOnTop(isPinned);
 	}
 
+	_handleSearch (query) {
+		this._stopImageIteration();
+		this.setState(
+			{ keyword: query },
+			() => {
+				this._fetchImagesFromOffset(0)
+					.then((result) => {
+						if (result.images.length) {
+							const image = result.images[0];
+
+							this.setState({
+								images: result.images,
+								currentImage: image,
+								offset: this.props.cacheCount,
+							});
+
+							giphyService.resizeWindowForImage(image.width, image.height);
+
+							this._tryPreloadNextImage(0);
+						}
+					});
+			}
+		);
+	}
+
 	render () {
-		let content = <span>No image loaded</span>;
+		const controllPanel = (
+			<ControlPanel
+				key="controll-panel"
+				keyword={this.state.keyword}
+				hasImages={this.state.images.length !== 0}
+				onSearch={this._handleSearch}
+				onPin={this._handlePinToggle}
+			/>
+		);
+		let content = [
+			<img key="image" src="images/no_image.png" alt=""/>,
+			controllPanel,
+		];
 
 		if (this.state.images.length) {
-			content = (
-				<div className="giphy-loader">
-					<GiphyImage
-						url={this.state.currentImage.url}
-						width={this.state.currentImage.width}
-						height={this.state.currentImage.height}
-						onImageLoaded={this._handleImageLoaded}
-					/>
-					<ControlPanel
-						onSearch={(text) => {console.log(text);}}
-						onPin={this._handlePinToggle}
-					/>
-				</div>
-			);
+			content = [
+				<GiphyImage
+					key="image"
+					url={this.state.currentImage.url}
+					width={this.state.currentImage.width}
+					height={this.state.currentImage.height}
+					onImageLoaded={this._handleImageLoaded}
+				/>,
+				controllPanel
+			];
 		}
 
-		return content;
+		return (
+			<div className="giphy-loader">
+				{ content }
+			</div>
+		);
 	}
 }

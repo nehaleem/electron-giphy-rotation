@@ -16,7 +16,7 @@ class App {
 			return this;
 		}
 
-		const mainWindow = new BrowserWindow(Object.assign({ width: 1000, height: 800, resizable, frame: true }));
+		const mainWindow = new BrowserWindow(Object.assign({ width: 430, height: 330, resizable, frame: true }));
 
 		if (useTrayIcon) {
 			const trayIconPath = App._getTrayIconPath();

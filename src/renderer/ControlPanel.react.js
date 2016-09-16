@@ -3,6 +3,8 @@ import classNames from 'classnames';
 
 export default class ControlPanelComponent extends React.Component {
 	static propTypes = {
+		keyword: React.PropTypes.string,
+		hasImages: React.PropTypes.bool,
 		onPin: React.PropTypes.func,
 		onSearch: React.PropTypes.func,
 		onPrev: React.PropTypes.func,
@@ -23,6 +25,16 @@ export default class ControlPanelComponent extends React.Component {
 		this._handlePinToggle = this._handlePinToggle.bind(this);
 	}
 
+	componentDidUpdate (prevProps) {
+		if (!prevProps.isSearchOpen && this.props.isSearchOpen) {
+			this._searchInputNode.focus();
+		}
+
+		if (this._searchInputNode) {
+			this._searchInputNode.value = this.props.keyword;
+		}
+	}
+
 	_setSearchState (state) {
 		this.setState({ isSearchOpen: state });
 	}
@@ -30,14 +42,13 @@ export default class ControlPanelComponent extends React.Component {
 	_handleSearch () {
 		this._setSearchState(false);
 
-		this.props.onSearch(this._searchInputNode.value);
+		if (this.props.keyword !== this._searchInputNode.value) {
+			this.props.onSearch(this._searchInputNode.value);
+		}
 	}
 
 	_handlePinToggle () {
-		this.setState(
-			{ windowIsPinned: !this.state.windowIsPinned },
-			() => { this._searchInputNode.focus() }
-		);
+		this.setState({ windowIsPinned: !this.state.windowIsPinned });
 
 		this.props.onPin(!this.state.windowIsPinned);
 	}
@@ -70,8 +81,8 @@ export default class ControlPanelComponent extends React.Component {
 				>
 					F
 				</button>,
-				<button key="prevBtn" className="button">{'<'}</button>,
-				<button key="nextBtn" className="button">></button>,
+				<button disabled={!this.props.hasImages} key="prevBtn" className="button">{'<'}</button>,
+				<button disabled={!this.props.hasImages} key="nextBtn" className="button">></button>,
 				<button
 					key="likeBtn"
 					onClick={this._handlePinToggle}

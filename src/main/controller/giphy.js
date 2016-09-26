@@ -1,5 +1,6 @@
 import url from 'url';
-import request from 'request-promise';
+
+import request from '../lib/request';
 
 function _generateApiRequest (methodName, queryObject = {}) {
 	const requestUrl = url.format({

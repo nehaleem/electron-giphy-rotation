@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+const path = require('path');
+
+const electronPackager = require('electron-packager');
+const rimraf = require('rimraf');
+
+function buildPackage () {
+	const options = {
+		dir: path.resolve(__dirname, '..'),
+		platform: 'linux',
+		arch: 'x64',
+		/* Build to asar archive */
+		// asar: true,
+		ignore: [
+			/\.idea/,
+			/src/,
+			/bin/,
+			/gitignore/,
+			/babelrc/,
+			/editorconfig/,
+		],
+		out: 'dist/linux',
+		name: 'giphy-rotator'
+	};
+
+	electronPackager(options, (error) => {
+		if (error) {
+			throw error;
+		}
+
+		console.log('Build complete!');
+	});
+}
+
+rimraf(path.resolve(__dirname, '../dist'), (error) => {
+	if (error) {
+		throw error;
+	}
+
+	buildPackage();
+});
+

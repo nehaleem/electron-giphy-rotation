@@ -1,9 +1,11 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export default class ControlPanelComponent extends React.Component {
 	static propTypes = {
-		isVisible: React.PropTypes.bool,
-		onPause: React.PropTypes.func,
+		keyword: React.PropTypes.string,
+		hasImages: React.PropTypes.bool,
+		onPin: React.PropTypes.func,
 		onSearch: React.PropTypes.func,
 		onPrev: React.PropTypes.func,
 		onNext: React.PropTypes.func,
@@ -14,11 +16,23 @@ export default class ControlPanelComponent extends React.Component {
 
 		this.state = {
 			isSearchOpen: false,
+			windowIsPinned: false,
 		};
 
 		this._searchInputNode = null;
 
 		this._handleSearch = this._handleSearch.bind(this);
+		this._handlePinToggle = this._handlePinToggle.bind(this);
+	}
+
+	componentDidUpdate (prevProps) {
+		if (!prevProps.isSearchOpen && this.props.isSearchOpen) {
+			this._searchInputNode.focus();
+		}
+
+		if (this._searchInputNode) {
+			this._searchInputNode.value = this.props.keyword;
+		}
 	}
 
 	_setSearchState (state) {
@@ -28,7 +42,15 @@ export default class ControlPanelComponent extends React.Component {
 	_handleSearch () {
 		this._setSearchState(false);
 
-		this.props.onSearch(this._searchInputNode.value);
+		if (this.props.keyword !== this._searchInputNode.value) {
+			this.props.onSearch(this._searchInputNode.value);
+		}
+	}
+
+	_handlePinToggle () {
+		this.setState({ windowIsPinned: !this.state.windowIsPinned });
+
+		this.props.onPin(!this.state.windowIsPinned);
 	}
 
 	_renderButtons () {
@@ -37,6 +59,7 @@ export default class ControlPanelComponent extends React.Component {
 				<input
 					ref={(node) => this._searchInputNode = node }
 					key="search"
+					maxLength="50"
 					pattern="[A-Za-z]+"
 					type="text"
 				/>,
@@ -58,9 +81,15 @@ export default class ControlPanelComponent extends React.Component {
 				>
 					F
 				</button>,
-				<button key="prevBtn" className="button">{'<'}</button>,
-				<button key="nextBtn" className="button">></button>,
-				<button key="likeBtn" className="button">✩</button>,
+				<button disabled={!this.props.hasImages} key="prevBtn" className="button">{'<'}</button>,
+				<button disabled={!this.props.hasImages} key="nextBtn" className="button">></button>,
+				<button
+					key="likeBtn"
+					onClick={this._handlePinToggle}
+					className={classNames('button', { active: this.state.windowIsPinned })}
+				>
+					P
+				</button>,
 			];
 		}
 	}

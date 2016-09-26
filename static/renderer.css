@@ -80,23 +80,33 @@ input:focus{
 	height: 100%;
 }
 
+/* Giphy loader wrapper */
+
+.giphy-loader:hover .control-panel {
+	display: inline-block;
+}
+
 /* Control panel */
 
 .control-panel {
 	position: absolute;
-	display: inline-block;
-	bottom: 10px;
-	left: 50%;
+	display: none;
+	bottom: 15px;
+	width: 160px;
+	left: 0;
+	right: 0;
+	margin: auto;
 	border: 2px solid #bfbfbf;
 	border-radius: 20px;
-	padding: 7px;
-	background-color: rgba(255, 255, 255, 0.7);
+	padding: 3px;
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 .control-panel input {
 	color: #3c3c3c;
-	width: 105px;
-	height: 40px;
+	margin-right: 2px;
+	width: 90px;
+	height: 34px;
 	padding-left: 10px;
 	padding-right: 10px;
 	border: 2px solid #bfbfbf;
@@ -111,6 +121,10 @@ input:focus{
 	border: 2px solid #bfbfbf;
 	border-radius: 20px;
 	background-color: rgba(255, 255, 255, 0.7);
+}
+
+.control-panel .button.active {
+	background-color: white;
 }
 
 .control-panel .button:hover {

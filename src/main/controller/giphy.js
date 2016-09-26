@@ -1,24 +1,21 @@
 import url from 'url';
+import querystring from 'querystring';
 
 import request from '../lib/request';
 
 function _generateApiRequest (methodName, queryObject = {}) {
-	const requestUrl = url.format({
-		protocol: 'http',
-		host: 'api.giphy.com',
-		pathname: `v1/gifs/${methodName}`,
-	});
-
+	const query = Object.assign(
+		queryObject,
+		{
+			api_key: 'dc6zaTOxFJmzC' // Beta KEY
+		}
+	);
+	const queryString = querystring.stringify(query);
+	const requestPath = `/v1/gifs/${methodName}?${queryString}`;
 	const requestOptions = {
 		method: 'GET',
-		uri: requestUrl,
-		qs: Object.assign(
-			queryObject,
-			{
-				api_key: 'dc6zaTOxFJmzC' // Beta KEY
-			}
-		),
-		json: true
+		host: 'api.giphy.com',
+		path: requestPath,
 	};
 
 	return request(requestOptions);

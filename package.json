@@ -10,7 +10,7 @@
     "build:linux": "./bin/build-linux-x64",
     "transpile": "./node_modules/babel-cli/bin/babel.js src --out-dir build --source-maps inline",
     "watch": "nodemon --exec \"npm run start\" --ext js,css --watch src",
-    "start": "npm run build && electron . --enable-logging --remote-debugging-port=9222 --debug=5858"
+    "start": "npm run transpile && electron . --enable-logging --remote-debugging-port=9222 --debug=5858"
   },
   "author": "",
   "license": "ISC",

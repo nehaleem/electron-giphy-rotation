@@ -19,6 +19,8 @@ const loadingBoxElement = document.getElementById('loading-box');
 
 loadingBoxElement.parentNode.removeChild(loadingBoxElement);
 
+require('devtron').install();
+
 ReactDOM.render(
 	<App />,
 	document.getElementById('react-root')

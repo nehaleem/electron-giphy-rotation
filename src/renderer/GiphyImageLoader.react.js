@@ -14,7 +14,7 @@ export default class GiphyImageLoaderComponent extends React.Component {
 	};
 
 	static defaultProps = {
-		rotationSpeed: 15 * 1000, // 15 sec,
+		rotationSpeed: 5 * 1000, // 5 sec,
 		cacheCount: 50,
 		cacheMaxHit: 40,
 	};

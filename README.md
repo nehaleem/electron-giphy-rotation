@@ -16,4 +16,4 @@ This app demonstrates basic usage of electron implementation.
 1. `$ npm run watch`
 
 # Presentation
-http://slides.com/djh3ll/electron
+http://slides.com/nehaleem/electron
